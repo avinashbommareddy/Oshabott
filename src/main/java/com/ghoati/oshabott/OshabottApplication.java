@@ -1,5 +1,6 @@
 package com.ghoati.oshabott;
 
+import com.ghoati.oshabott.listeners.HelloListener;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class OshabottApplication {
 	@Autowired
 	private Environment env;
 
+	@Autowired
+	private HelloListener helloListener;
+
 	public static void main(String[] args) {
 		SpringApplication.run(OshabottApplication.class, args);
 	}
@@ -28,11 +32,7 @@ public class OshabottApplication {
 				.login()
 				.join();
 
-		api.addMessageCreateListener(event -> {
-			if(event.getMessageContent().equalsIgnoreCase("Hello")) {
-				event.getChannel().sendMessage("Fuck off.");
-			}
-		});
+		api.addMessageCreateListener(helloListener);
 
 		return api;
 	}
